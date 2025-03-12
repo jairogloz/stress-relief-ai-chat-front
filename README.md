@@ -1,3 +1,11 @@
+# Stress-Relief AI Chat Interface
+
+This is an AI chat interface for the stress-relief-ai-chat project. The purpose of this AI agent is to help the end user feel at peace no matter the situation by providing actionable steps either to solve their problem or at least to have a better perspective on the situation.
+
+The design of this interface is based on one from a YouTube video. [YouTube Video Link](https://www.youtube.com/watch?v=qwM23_kF4v4&t=177s)
+
+Sign up for early access to the application [here](https://ai-stress-relief-landing-page.vercel.app/).
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
