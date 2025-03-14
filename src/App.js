@@ -20,11 +20,14 @@ function App() {
     setChatLog(chatLogNew);
     // fetch response to the api combining the chatlog array of
     // messages and sending it as a message to localhost:3000 as a post
+    // Todo: get token from session
+    const token = "";
     const messages = chatLogNew.map((message) => message.message).join("\n");
-    const response = await fetch("http://localhost:3080", {
+    const response = await fetch("http://localhost:8081/api/messages", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         message: messages,
@@ -32,7 +35,7 @@ function App() {
     });
 
     const data = await response.json();
-    setChatLog([...chatLogNew, { user: "gpt", message: `${data.message}` }]);
+    setChatLog([...chatLogNew, { user: "gpt", message: `${data.content}` }]);
     //console.log(data.message);
   }
 
