@@ -35,6 +35,12 @@ function App() {
     setChatLog([]);
   }
 
+  function resetInputs() {
+    setEmail("");
+    setPassword("");
+    setConfirmPassword("");
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
     let chatLogNew = [...chatLog, { user: "me", message: `${input}` }];
@@ -107,7 +113,7 @@ function App() {
         <div className="auth-container">
           {isLogin ? (
             <form onSubmit={handleLogin} className="auth-form">
-              <h2>Login</h2>
+              <h2>Stress Relief AI Chat</h2>
               <input
                 type="email"
                 placeholder="Email"
@@ -127,12 +133,19 @@ function App() {
               </button>
               <p className="auth-toggle">
                 Don't have an account?{" "}
-                <span onClick={() => setIsLogin(false)}>Sign Up</span>
+                <span
+                  onClick={() => {
+                    setIsLogin(false);
+                    resetInputs();
+                  }}
+                >
+                  Sign Up
+                </span>
               </p>
             </form>
           ) : (
             <form onSubmit={handleSignup} className="auth-form">
-              <h2>Sign Up</h2>
+              <h2>Stress Relief AI Chat</h2>
               <input
                 type="email"
                 placeholder="Email"
@@ -159,7 +172,14 @@ function App() {
               </button>
               <p className="auth-toggle">
                 Already have an account?{" "}
-                <span onClick={() => setIsLogin(true)}>Login</span>
+                <span
+                  onClick={() => {
+                    setIsLogin(true);
+                    resetInputs();
+                  }}
+                >
+                  Login
+                </span>
               </p>
             </form>
           )}
