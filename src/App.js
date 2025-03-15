@@ -1,13 +1,34 @@
 import logo from "./logo.svg";
 import "./App.css";
 import "./normal.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { createClient } from "@supabase/supabase-js";
+
+const supabaseUrl = "https://lwkymozkipujzjsyddrv.supabase.co";
+const supabaseKey =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx3a3ltb3praXB1anpqc3lkZHJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE0Nzg4OTEsImV4cCI6MjA1NzA1NDg5MX0.PZbZFfL6RtXv4o7ZyHIqgu1McrMOdYIDfVk_K6RPH-o";
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 function App() {
   const [input, setInput] = useState("");
   const [chatLog, setChatLog] = useState([
     { user: "gpt", message: "Hello, I am an AI. How can I help you?" },
   ]);
+  const [session, setSession] = useState(null);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLogin, setIsLogin] = useState(true);
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+  }, []);
 
   function clearChat() {
     setChatLog([]);
@@ -21,7 +42,8 @@ function App() {
     // fetch response to the api combining the chatlog array of
     // messages and sending it as a message to localhost:3000 as a post
     // Todo: get token from session
-    const token = "";
+    const token =
+      "eyJhbGciOiJIUzI1NiIsImtpZCI6InFaOTZ1em1aYkNBa2xITVciLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2x3a3ltb3praXB1anpqc3lkZHJ2LnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiI5MjUyZTU3Ni0wMjU0LTQ1NmUtODg1Yy1hY2JlYmNmZTA0YjIiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzQxOTE2MzQxLCJpYXQiOjE3NDE5MTI3NDEsImVtYWlsIjoiamFpcm8ubG96YW5vLnB1YmxpY0BnbWFpbC5jb20iLCJwaG9uZSI6IiIsImFwcF9tZXRhZGF0YSI6eyJwcm92aWRlciI6ImVtYWlsIiwicHJvdmlkZXJzIjpbImVtYWlsIl19LCJ1c2VyX21ldGFkYXRhIjp7ImVtYWlsX3ZlcmlmaWVkIjp0cnVlfSwicm9sZSI6ImF1dGhlbnRpY2F0ZWQiLCJhYWwiOiJhYWwxIiwiYW1yIjpbeyJtZXRob2QiOiJwYXNzd29yZCIsInRpbWVzdGFtcCI6MTc0MTkxMjc0MX1dLCJzZXNzaW9uX2lkIjoiYjEwNjFlZDQtNTY0Yy00MjAxLTlmMmEtYjFlMjllN2JhZmVlIiwiaXNfYW5vbnltb3VzIjpmYWxzZX0.foj5aiQWsA3Nf5hTGfl2M3Fxus5xdMhouVUhGjIw3A0";
     const messages = chatLogNew.map((message) => message.message).join("\n");
     const response = await fetch("http://localhost:8081/api/messages", {
       method: "POST",
@@ -39,30 +61,133 @@ function App() {
     //console.log(data.message);
   }
 
+  async function handleLogin(e) {
+    e.preventDefault();
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    if (error) console.error("Error logging in:", error.message);
+  }
+
+  async function handleSignup(e) {
+    e.preventDefault();
+    const { error } = await supabase.auth.signUp({ email, password });
+    if (error) console.error("Error signing up:", error.message);
+  }
+
+  async function handleLogout() {
+    const { error } = await supabase.auth.signOut();
+    if (error) console.error("Error logging out:", error.message);
+    setSession(null);
+  }
+
+  if (!session) {
+    return (
+      <div className="App">
+        <div className="auth-container">
+          {isLogin ? (
+            <form onSubmit={handleLogin} className="auth-form">
+              <h2>Login</h2>
+              <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="auth-input"
+              />
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="auth-input"
+              />
+              <button type="submit" className="auth-button">
+                Login
+              </button>
+              <p className="auth-toggle">
+                Don't have an account?{" "}
+                <span onClick={() => setIsLogin(false)}>Sign Up</span>
+              </p>
+            </form>
+          ) : (
+            <form onSubmit={handleSignup} className="auth-form">
+              <h2>Sign Up</h2>
+              <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="auth-input"
+              />
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="auth-input"
+              />
+              <button type="submit" className="auth-button">
+                Sign Up
+              </button>
+              <p className="auth-toggle">
+                Already have an account?{" "}
+                <span onClick={() => setIsLogin(true)}>Login</span>
+              </p>
+            </form>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="App">
-      <aside className="sidemenu">
-        <div className="side-menu-button" onClick={clearChat}>
-          <span>+</span>New Chat
-        </div>
-      </aside>
-      <section className="chatbox">
-        <div className="chat-log">
-          {chatLog.map((message, index) => (
-            <ChatMessage key={index} message={message} />
-          ))}
-        </div>
-        <div className="chat-input-holder">
-          <form onSubmit={handleSubmit}>
-            <input
-              rows="1"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              className="chat-input-textarea"
-            ></input>
-          </form>
-        </div>
-      </section>
+      {session && (
+        <nav className="navbar">
+          <div className="navbar-content">
+            <div className="navbar-logo">Stress Relief AI Chat</div>
+            <div
+              className="navbar-avatar"
+              onClick={() => setShowDropdown(!showDropdown)}
+            >
+              <div className="avatar-circle"></div>
+              {showDropdown && (
+                <div className="dropdown-menu">
+                  <div className="dropdown-item" onClick={handleLogout}>
+                    Logout
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </nav>
+      )}
+      <div className="main-content">
+        <aside className="sidemenu">
+          <div className="side-menu-button" onClick={clearChat}>
+            <span>+</span>New Chat
+          </div>
+        </aside>
+        <section className="chatbox">
+          <div className="chat-log">
+            {chatLog.map((message, index) => (
+              <ChatMessage key={index} message={message} />
+            ))}
+          </div>
+          <div className="chat-input-holder">
+            <form onSubmit={handleSubmit}>
+              <input
+                rows="1"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                className="chat-input-textarea"
+              ></input>
+            </form>
+          </div>
+        </section>
+      </div>
     </div>
   );
 }

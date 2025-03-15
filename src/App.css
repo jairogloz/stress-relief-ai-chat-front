@@ -11,6 +11,7 @@
   width: 260px;
   padding:10px;
   background-color: #202123;
+  flex-shrink: 0;
 }
 
 .side-menu-button {
@@ -34,9 +35,11 @@
 }
 
 .chatbox {
-  flex: 1;
+  flex-grow: 1; /* Ensure the chatbox takes the remaining horizontal space */
+  display: flex;
+  flex-direction: column;
   background-color: #343541;
-  position:relative;
+  position: relative;
 }
 
 .App-logo {
@@ -52,7 +55,7 @@
 
 .chat-input-holder{
   padding:24px;
-  position:absolute;
+  position:relative;
   bottom:0;
   left:0;right:0;
 }
@@ -86,6 +89,8 @@
 }
 
 .chat-log {
+  flex: 1;
+  overflow-y: auto;
   text-align: left;
 }
 
@@ -131,4 +136,122 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.auth-form {
+  background-color: #202123;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  margin: 20px auto;
+  width: 300px;
+  text-align: left;
+}
+
+.auth-input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+.auth-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #0da37f;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.auth-button:hover {
+  background-color: #0b8a6a;
+}
+
+.auth-toggle {
+  margin-top: 10px;
+  text-align: center;
+  color: #61dafb;
+  cursor: pointer;
+}
+
+.auth-toggle span {
+  text-decoration: underline;
+}
+
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw; /* Ensure the container takes the full width of the viewport */
+}
+
+.navbar {
+  width: 100%;
+  background-color: #202123;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.navbar-logo {
+  color: white;
+  font-size: 1.5em;
+}
+
+.navbar-avatar {
+  position: relative;
+  cursor: pointer;
+}
+
+.avatar-circle {
+  background-color: white;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background-color: #202123;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  width: 150px;
+  text-align: left;
+}
+
+.dropdown-item {
+  padding: 10px;
+  color: white;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background-color: #343541;
+}
+
+.main-content {
+  display: flex;
+  margin-top: 60px; /* Adjust this value to match the height of your navbar */
+  height: calc(100vh - 60px); /* Ensure the main content takes the full height minus the navbar */
+  width: 100%; /* Ensure the main content takes the full width of the viewport */
 }
