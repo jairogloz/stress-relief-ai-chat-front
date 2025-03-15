@@ -17,6 +17,7 @@ function App() {
   const [session, setSession] = useState(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [isLogin, setIsLogin] = useState(true);
   const [showDropdown, setShowDropdown] = useState(false);
 
@@ -72,8 +73,26 @@ function App() {
 
   async function handleSignup(e) {
     e.preventDefault();
+    if (password !== confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
     const { error } = await supabase.auth.signUp({ email, password });
-    if (error) console.error("Error signing up:", error.message);
+    if (error) {
+      console.error("Error signing up:", error.message);
+    } else {
+      // Automatically log the user in after successful signup
+      const { error: loginError, data: loginData } =
+        await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+      if (loginError) {
+        console.error("Error logging in:", loginError.message);
+      } else {
+        setSession(loginData.session);
+      }
+    }
   }
 
   async function handleLogout() {
@@ -126,6 +145,13 @@ function App() {
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                className="auth-input"
+              />
+              <input
+                type="password"
+                placeholder="Confirm Password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
                 className="auth-input"
               />
               <button type="submit" className="auth-button">
