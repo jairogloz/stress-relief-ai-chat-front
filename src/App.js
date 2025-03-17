@@ -49,10 +49,11 @@ function App() {
 
     // Fetch response to the API combining the chatlog array of
     // messages and sending it as a message to localhost:8081 as a POST
-    // Todo: get token from session
-    const token =
-      "eyJhbGciOiJIUzI1NiIsImtpZCI6InFaOTZ1em1aYkNBa2xITVciLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2x3a3ltb3praXB1anpqc3lkZHJ2LnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiI5MjUyZTU3Ni0wMjU0LTQ1NmUtODg1Yy1hY2JlYmNmZTA0YjIiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzQyMTc5Njg0LCJpYXQiOjE3NDIxNzYwODQsImVtYWlsIjoiamFpcm8ubG96YW5vLnB1YmxpY0BnbWFpbC5jb20iLCJwaG9uZSI6IiIsImFwcF9tZXRhZGF0YSI6eyJwcm92aWRlciI6ImVtYWlsIiwicHJvdmlkZXJzIjpbImVtYWlsIl19LCJ1c2VyX21ldGFkYXRhIjp7ImEiOiJiIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInVzZXJfdmVyaWZpZWQiOmZhbHNlfSwicm9sZSI6ImF1dGhlbnRpY2F0ZWQiLCJhYWwiOiJhYWwxIiwiYW1yIjpbeyJtZXRob2QiOiJwYXNzd29yZCIsInRpbWVzdGFtcCI6MTc0MjE3NjA4NH1dLCJzZXNzaW9uX2lkIjoiYmE1OTIxY2YtOWQ1MS00ZWI0LThjYWItMmFkNzZhYTdjMTIxIiwiaXNfYW5vbnltb3VzIjpmYWxzZX0.OayceHZr5bUKmQe3Z3Xw7C9gXeterRv1qRQfjbEF8Fc";
-    const messages = chatLogNew.map((message) => message.message).join("\n");
+    const token = session?.access_token;
+    if (!token) {
+      alert("User is not authenticated");
+      return;
+    }
 
     try {
       const response = await fetch("http://localhost:8081/api/messages", {
@@ -62,7 +63,7 @@ function App() {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          message: messages,
+          message: input,
         }),
       });
 
