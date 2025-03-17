@@ -46,26 +46,36 @@ function App() {
     let chatLogNew = [...chatLog, { user: "me", message: `${input}` }];
     setInput("");
     setChatLog(chatLogNew);
-    // fetch response to the api combining the chatlog array of
-    // messages and sending it as a message to localhost:3000 as a post
+
+    // Fetch response to the API combining the chatlog array of
+    // messages and sending it as a message to localhost:8081 as a POST
     // Todo: get token from session
     const token =
-      "eyJhbGciOiJIUzI1NiIsImtpZCI6InFaOTZ1em1aYkNBa2xITVciLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2x3a3ltb3praXB1anpqc3lkZHJ2LnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiI5MjUyZTU3Ni0wMjU0LTQ1NmUtODg1Yy1hY2JlYmNmZTA0YjIiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzQxOTE2MzQxLCJpYXQiOjE3NDE5MTI3NDEsImVtYWlsIjoiamFpcm8ubG96YW5vLnB1YmxpY0BnbWFpbC5jb20iLCJwaG9uZSI6IiIsImFwcF9tZXRhZGF0YSI6eyJwcm92aWRlciI6ImVtYWlsIiwicHJvdmlkZXJzIjpbImVtYWlsIl19LCJ1c2VyX21ldGFkYXRhIjp7ImVtYWlsX3ZlcmlmaWVkIjp0cnVlfSwicm9sZSI6ImF1dGhlbnRpY2F0ZWQiLCJhYWwiOiJhYWwxIiwiYW1yIjpbeyJtZXRob2QiOiJwYXNzd29yZCIsInRpbWVzdGFtcCI6MTc0MTkxMjc0MX1dLCJzZXNzaW9uX2lkIjoiYjEwNjFlZDQtNTY0Yy00MjAxLTlmMmEtYjFlMjllN2JhZmVlIiwiaXNfYW5vbnltb3VzIjpmYWxzZX0.foj5aiQWsA3Nf5hTGfl2M3Fxus5xdMhouVUhGjIw3A0";
+      "eyJhbGciOiJIUzI1NiIsImtpZCI6InFaOTZ1em1aYkNBa2xITVciLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2x3a3ltb3praXB1anpqc3lkZHJ2LnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiI5MjUyZTU3Ni0wMjU0LTQ1NmUtODg1Yy1hY2JlYmNmZTA0YjIiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzQyMTc5Njg0LCJpYXQiOjE3NDIxNzYwODQsImVtYWlsIjoiamFpcm8ubG96YW5vLnB1YmxpY0BnbWFpbC5jb20iLCJwaG9uZSI6IiIsImFwcF9tZXRhZGF0YSI6eyJwcm92aWRlciI6ImVtYWlsIiwicHJvdmlkZXJzIjpbImVtYWlsIl19LCJ1c2VyX21ldGFkYXRhIjp7ImEiOiJiIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInVzZXJfdmVyaWZpZWQiOmZhbHNlfSwicm9sZSI6ImF1dGhlbnRpY2F0ZWQiLCJhYWwiOiJhYWwxIiwiYW1yIjpbeyJtZXRob2QiOiJwYXNzd29yZCIsInRpbWVzdGFtcCI6MTc0MjE3NjA4NH1dLCJzZXNzaW9uX2lkIjoiYmE1OTIxY2YtOWQ1MS00ZWI0LThjYWItMmFkNzZhYTdjMTIxIiwiaXNfYW5vbnltb3VzIjpmYWxzZX0.OayceHZr5bUKmQe3Z3Xw7C9gXeterRv1qRQfjbEF8Fc";
     const messages = chatLogNew.map((message) => message.message).join("\n");
-    const response = await fetch("http://localhost:8081/api/messages", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        message: messages,
-      }),
-    });
 
-    const data = await response.json();
-    setChatLog([...chatLogNew, { user: "gpt", message: `${data.content}` }]);
-    //console.log(data.message);
+    try {
+      const response = await fetch("http://localhost:8081/api/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          message: messages,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Server error: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      setChatLog([...chatLogNew, { user: "gpt", message: `${data.content}` }]);
+    } catch (error) {
+      console.error("Error:", error);
+      alert(`An error occurred: ${error.message}`);
+    }
   }
 
   async function handleLogin(e) {
@@ -105,6 +115,7 @@ function App() {
     const { error } = await supabase.auth.signOut();
     if (error) console.error("Error logging out:", error.message);
     setSession(null);
+    resetInputs();
   }
 
   if (!session) {
