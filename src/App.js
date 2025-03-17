@@ -1,7 +1,7 @@
 import logo from "./logo.svg";
 import "./App.css";
 import "./normal.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = "https://lwkymozkipujzjsyddrv.supabase.co";
@@ -21,6 +21,7 @@ function App() {
   const [isLogin, setIsLogin] = useState(true);
   const [showDropdown, setShowDropdown] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const chatLogRef = useRef(null);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -31,6 +32,12 @@ function App() {
       setSession(session);
     });
   }, []);
+
+  useEffect(() => {
+    if (chatLogRef.current) {
+      chatLogRef.current.scrollTop = chatLogRef.current.scrollHeight;
+    }
+  }, [chatLog]);
 
   function clearChat() {
     setChatLog([]);
@@ -231,7 +238,7 @@ function App() {
           </div>
         </aside>
         <section className="chatbox">
-          <div className="chat-log">
+          <div className="chat-log" ref={chatLogRef}>
             {chatLog.map((message, index) => (
               <ChatMessage key={index} message={message} />
             ))}
