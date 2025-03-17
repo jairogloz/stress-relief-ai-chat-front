@@ -128,6 +128,12 @@ function App() {
     resetInputs();
   }
 
+  function handleInputChange(e) {
+    setInput(e.target.value);
+    e.target.style.height = "auto";
+    e.target.style.height = `${Math.min(e.target.scrollHeight, 5 * 24)}px`;
+  }
+
   if (!session) {
     return (
       <div className="App">
@@ -246,12 +252,13 @@ function App() {
           </div>
           <div className="chat-input-holder">
             <form onSubmit={handleSubmit}>
-              <input
+              <textarea
                 rows="1"
                 value={input}
-                onChange={(e) => setInput(e.target.value)}
+                onChange={handleInputChange}
                 className="chat-input-textarea"
-              ></input>
+                style={{ resize: "none" }}
+              ></textarea>
             </form>
           </div>
         </section>

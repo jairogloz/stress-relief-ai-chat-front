@@ -71,6 +71,10 @@
   border-color:none;
   outline:none;
   box-shadow: 0 0 8px 0 rgba(0,0,0,0.25);
+  overflow: auto;
+  resize: none;
+  min-height: 50px;
+  max-height: 120px; /* Adjusted to allow up to 5 lines */
 }
 
 .App-header {
