@@ -10,9 +10,49 @@ const supabaseKey =
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 function App() {
+  const messages = {
+    en: [
+      "What's been on your mind today? Let’s find a way to ease the stress.",
+      "Feeling overwhelmed? Share what's weighing you down.",
+      "What’s one thing that made today tough for you?",
+      "Tell me something that's been stressing you out—I’m here to help.",
+      "Is there something on your mind that you'd like to unload?",
+      "What’s been the most stressful part of your day so far?",
+      "Sometimes just talking about it helps. What’s bothering you today?",
+      "What’s something you wish could feel lighter right now?",
+      "If you could change one thing about today, what would it be?",
+      "Let's tackle one thing at a time. What’s been challenging for you today?",
+    ],
+    es: [
+      "¿Qué ha estado en tu mente hoy? Busquemos una forma de aliviar el estrés.",
+      "¿Te sientes abrumado? Comparte lo que te preocupa.",
+      "¿Qué es lo más difícil que te ha pasado hoy?",
+      "Cuéntame algo que te haya estado estresando, estoy aquí para ayudar.",
+      "¿Hay algo en tu mente que te gustaría soltar?",
+      "¿Cuál ha sido la parte más estresante de tu día hasta ahora?",
+      "A veces solo hablarlo ayuda. ¿Qué te preocupa hoy?",
+      "¿Qué es algo que desearías que pesara menos en este momento?",
+      "Si pudieras cambiar algo de hoy, ¿qué sería?",
+      "Vamos paso a paso. ¿Qué ha sido difícil para ti hoy?",
+    ],
+  };
+
+  function getRandomMessage() {
+    const languages = Object.keys(messages);
+    const randomLanguage =
+      languages[Math.floor(Math.random() * languages.length)];
+    const randomMessage =
+      messages[randomLanguage][
+        Math.floor(Math.random() * messages[randomLanguage].length)
+      ];
+    return randomMessage;
+  }
+
+  const initialMessage = getRandomMessage();
+
   const [input, setInput] = useState("");
   const [chatLog, setChatLog] = useState([
-    { user: "gpt", message: "Hello, I am an AI. How can I help you?" },
+    { user: "gpt", message: initialMessage },
   ]);
   const [session, setSession] = useState(null);
   const [email, setEmail] = useState("");
