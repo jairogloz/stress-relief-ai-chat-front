@@ -4,9 +4,8 @@ import "./normal.css";
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = "https://lwkymozkipujzjsyddrv.supabase.co";
-const supabaseKey =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx3a3ltb3praXB1anpqc3lkZHJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE0Nzg4OTEsImV4cCI6MjA1NzA1NDg5MX0.PZbZFfL6RtXv4o7ZyHIqgu1McrMOdYIDfVk_K6RPH-o";
+const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
+const supabaseKey = process.env.REACT_APP_SUPABASE_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 function App() {
@@ -103,16 +102,19 @@ function App() {
     }
 
     try {
-      const response = await fetch("http://localhost:8081/api/messages", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          message: input,
-        }),
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/messages`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            message: input,
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`Server error: ${response.statusText}`);
