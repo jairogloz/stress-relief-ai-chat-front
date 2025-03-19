@@ -134,6 +134,13 @@ function App() {
     e.target.style.height = `${Math.min(e.target.scrollHeight, 5 * 24)}px`;
   }
 
+  function handleKeyDown(e) {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSubmit(e);
+    }
+  }
+
   if (!session) {
     return (
       <div className="App">
@@ -256,6 +263,7 @@ function App() {
                 rows="1"
                 value={input}
                 onChange={handleInputChange}
+                onKeyDown={handleKeyDown}
                 className="chat-input-textarea"
                 style={{ resize: "none" }}
               ></textarea>
