@@ -1,95 +1,74 @@
 .App {
   text-align: center;
   display: flex;
+  flex-direction: column; /* Change to column for better stacking on small screens */
   background-color: #282c34;
-  color:white;
-  position:absolute;
-  top:0;bottom: 0; left: 0; right: 0;
+  color: white;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
 .sidemenu {
-  width: 260px;
-  padding:10px;
+  width: 100%; /* Full width on small screens */
+  padding: 10px;
   background-color: #202123;
   flex-shrink: 0;
 }
 
 .side-menu-button {
-  padding:12px;
-  border:1px solid white;
+  padding: 12px;
+  border: 1px solid white;
   border-radius: 5px;
-  text-align:left;
+  text-align: left;
   transition: ease 0.25s all;
 }
 .side-menu-button:hover {
-  background-color: rgba(255,255,255,0.1);
-  padding:12px;
-  border:1px solid white;
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 12px;
+  border: 1px solid white;
   border-radius: 5px;
-  text-align:left;
+  text-align: left;
 }
 
 .side-menu-button span {
-  padding-left:6px;
-  padding-right:12px;
+  padding-left: 6px;
+  padding-right: 12px;
 }
 
 .chatbox {
-  flex-grow: 1; /* Ensure the chatbox takes the remaining horizontal space */
+  flex-grow: 1; /* Ensure the chatbox takes the remaining vertical space */
   display: flex;
   flex-direction: column;
   background-color: #343541;
   position: relative;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.chat-input-holder {
+  padding: 24px;
+  position: relative;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.chat-input-holder{
-  padding:24px;
-  position:relative;
-  bottom:0;
-  left:0;right:0;
-}
-
-.chat-input-textarea{
+.chat-input-textarea {
   background-color: #40414f;
-  width: 90%;
+  width: 100%; /* Full width on small screens */
   padding: 10px;
-  color:white;
+  color: white;
   font-size: 1.25em;
-  border-radius:5px;
-  border:none;
-  border-color:none;
-  outline:none;
-  box-shadow: 0 0 8px 0 rgba(0,0,0,0.25);
+  border-radius: 5px;
+  border: none;
+  border-color: none;
+  outline: none;
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.25);
   overflow: auto;
   resize: none;
   min-height: 50px;
   max-height: 120px; /* Adjusted to allow up to 5 lines */
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
 }
 
 .chat-log {
@@ -102,9 +81,9 @@
   background-color: #444654;
 }
 .chat-message-center {
-  display:flex;
+  display: flex;
   max-width: 640px;
-  margin-left:auto;
+  margin-left: auto;
   margin-right: auto;
   padding: 12px;
   padding-left: 40px;
@@ -128,18 +107,9 @@
   justify-content: center;
 }
 
-.message{
+.message {
   padding-left: 40px;
   padding-right: 40px;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }
 
 .auth-form {
@@ -148,7 +118,8 @@
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   margin: 20px auto;
-  width: 300px;
+  width: 90%; /* Adjusted for better responsiveness */
+  max-width: 300px;
   text-align: left;
 }
 
@@ -255,6 +226,7 @@
 
 .main-content {
   display: flex;
+  flex-direction: column; /* Change to column for better stacking on small screens */
   margin-top: 60px; /* Adjust this value to match the height of your navbar */
   height: calc(100vh - 60px); /* Ensure the main content takes the full height minus the navbar */
   width: 100%; /* Ensure the main content takes the full width of the viewport */
@@ -287,5 +259,24 @@
   }
   100% {
     opacity: 0;
+  }
+}
+
+/* Media Queries for Responsive Design */
+@media (min-width: 768px) {
+  .App {
+    flex-direction: row; /* Change to row for larger screens */
+  }
+
+  .sidemenu {
+    width: 260px; /* Fixed width for larger screens */
+  }
+
+  .chat-input-textarea {
+    width: 90%; /* Adjust width for larger screens */
+  }
+
+  .main-content {
+    flex-direction: row; /* Change to row for larger screens */
   }
 }
