@@ -44,17 +44,19 @@
   flex-direction: column;
   background-color: #343541;
   position: relative;
+  overflow: hidden; /* Prevent content overflow */
 }
 
 .chat-input-holder {
   padding: 24px;
-  position: relative;
+  position: absolute; /* Change to absolute positioning */
   bottom: 0;
   left: 0;
   right: 0;
   display: flex;
   align-items: center;
   justify-content: center; /* Center the group horizontally */
+  background-color: #343541; /* Match the background color of the chatbox */
 }
 
 .chat-input-group {
@@ -84,7 +86,7 @@
   background: #0da37f; /* Set background color */
   border: none;
   cursor: pointer;
-  margin-left: 10px;
+  margin-left: 5px; /* Add 5-pixel margin for separation */
   color: white;
   display: flex;
   align-items: center;
@@ -103,6 +105,7 @@
   flex: 1;
   overflow-y: auto;
   text-align: left;
+  padding-bottom: 100px; /* Add padding to prevent content from being hidden behind the input group */
 }
 
 .chat-message.chatgpt {
@@ -306,5 +309,20 @@
 
   .main-content {
     flex-direction: row; /* Change to row for larger screens */
+  }
+}
+
+@media (max-width: 767px) {
+  .chat-input-group {
+    width: 100%; /* Group occupies 100% of the parent width on narrow screens */
+  }
+
+  .chat-input-textarea {
+    width: calc(100% - 49px); /* Adjust width to account for the button and margin */
+  }
+
+  .send-button {
+    width: 44px; /* Fixed width for the button */
+    margin-left: 5px; /* Add 5-pixel margin for separation */
   }
 }
