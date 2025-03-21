@@ -3,6 +3,7 @@ import "./App.css";
 import "./normal.css";
 import { useState, useEffect, useRef } from "react";
 import { createClient } from "@supabase/supabase-js";
+import ReactMarkdown from "react-markdown";
 
 const supabaseUrl = process.env.REACT_APP_SUPABASE_URL;
 const supabaseKey = process.env.REACT_APP_SUPABASE_KEY;
@@ -340,7 +341,9 @@ const ChatMessage = ({ message }) => {
             </svg>
           )}
         </div>
-        <div className="message">{message.message}</div>
+        <div className="message">
+          <ReactMarkdown>{message.message}</ReactMarkdown>
+        </div>
       </div>
     </div>
   );
