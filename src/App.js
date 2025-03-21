@@ -106,6 +106,12 @@ function App() {
     setChatLog(chatLogNew);
     setIsLoading(true);
 
+    // Reset text area height
+    const textArea = document.querySelector(".chat-input-textarea");
+    if (textArea) {
+      textArea.style.height = "auto";
+    }
+
     const token = session?.access_token;
     if (!token) {
       alert("User is not authenticated");
