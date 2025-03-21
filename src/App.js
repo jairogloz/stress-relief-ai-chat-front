@@ -61,15 +61,25 @@ function App() {
   const [isLogin, setIsLogin] = useState(true);
   const [showDropdown, setShowDropdown] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [userName, setUserName] = useState("");
   const chatLogRef = useRef(null);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
+      if (session) {
+        console.log(session);
+        const user = session.user;
+        setUserName(user.email.split("@")[0]); // Use email prefix as username if no name is available
+      }
     });
 
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
+      if (session) {
+        const user = session.user;
+        setUserName(user.email.split("@")[0]); // Use email prefix as username if no name is available
+      }
     });
   }, []);
 
@@ -279,6 +289,9 @@ function App() {
               className="navbar-avatar"
               onClick={() => setShowDropdown(!showDropdown)}
             >
+              <span className="navbar-greeting">
+                Hello {userName ? userName : ""}!
+              </span>
               <div className="avatar-circle"></div>
               {showDropdown && (
                 <div className="dropdown-menu">

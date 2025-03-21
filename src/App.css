@@ -227,6 +227,14 @@
 .navbar-avatar {
   position: relative;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-greeting {
+  margin-right: 10px;
+  color: white;
+  font-size: 1em;
 }
 
 .avatar-circle {
